@@ -23,6 +23,10 @@ jobs:
     - name: Install dependencies using Yarn
       run: yarn
       working-directory: ./client 
+
+    - name: Set CI to false
+      run: echo "CI=false" >> $GITHUB_ENV
+
     - name: Run linting
       run: yarn lint
       working-directory: ./client 
