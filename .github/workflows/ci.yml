@@ -20,20 +20,20 @@ jobs:
       with:
         node-version: '18.x'
 
-    - name: Change directory to client
-      working-directory: ./client
-
     - name: Install dependencies using Yarn
       run: yarn
-
+      working-directory: ./client 
     - name: Run linting
       run: yarn lint
+      working-directory: ./client 
 
     - name: Run tests with coverage
       run: yarn test --coverage --ci --watchAll=false
+      working-directory: ./client 
 
     - name: Build the app
       run: yarn build
+      working-directory: ./client  
 
     - name: Upload coverage results
       uses: actions/upload-artifact@v3
