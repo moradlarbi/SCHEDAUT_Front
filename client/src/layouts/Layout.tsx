@@ -4,7 +4,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   Container,
   Drawer,
   List,
@@ -15,20 +14,18 @@ import {
 } from '@mui/material';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { SouthAmerica, DeleteForever } from '@mui/icons-material';
+
 
 const drawerWidth = 240;
 
 const Layout: React.FC = () => {
   // const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // logout();
-    navigate('/login');
-  };
+  // const handleLogout = () => {
+  //   // logout();
+  //   navigate('/login');
+  // };
 
   return (
     <div style={{ display: 'flex' }}>
