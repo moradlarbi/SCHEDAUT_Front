@@ -1,0 +1,42 @@
+name: CI for the front with Coverage, and Linting
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Change directory to client
+      working-directory: ./client
+
+    - name: Install dependencies using Yarn
+      run: yarn
+
+    - name: Run linting
+      run: yarn lint
+
+    - name: Run tests with coverage
+      run: yarn test --coverage --ci --watchAll=false
+
+    - name: Build the app
+      run: yarn build
+
+    - name: Upload coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: client/coverage/

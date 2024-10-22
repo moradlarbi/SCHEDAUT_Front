@@ -15,7 +15,6 @@ import { typography } from "./typography";
 import shadows, { customShadows } from "./shadows";
 import ComponentsOverrides from "./overrides";
 import breakpoints from "./breakpoints";
-import { light } from "@mui/material/styles/createPalette";
 
 // ----------------------------------------------------------------------
 
