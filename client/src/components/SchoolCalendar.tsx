@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 const SchoolCalendar = () => {
   const handleDateClick = (arg: any) => {
-    alert(`Date clicked: ${arg.dateStr}`);
+    alert(`Date 2 clicked: ${arg.dateStr}`);
   };
 
   return (
