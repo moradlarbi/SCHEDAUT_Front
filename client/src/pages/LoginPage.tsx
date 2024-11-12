@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Box, Typography, Link } from '@mui/material';
-// import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    //const { login } = useAuth();
+    const { login } = useAuth();
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // try {
-        //     await login(email, password);
-        //     setError(null);
-        // } catch (error) {
-        //     setError('Failed to login. Please check your email and password.');
-        // }
+        try {
+            await login(email, password);
+            setError(null);
+        } catch (error) {
+            setError('Failed to login. Please check your email and password.');
+        }
     };
 
     return (

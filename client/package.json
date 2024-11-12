@@ -1,4 +1,5 @@
 {
+  "proxy":"https://studious-lamp-95vrxjwj7q9c64x-3000.app.github.dev",
   "name": "client",
   "version": "0.1.0",
   "private": true,

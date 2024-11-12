@@ -22,12 +22,12 @@ const SchoolCalendar = () => {
       weekends={false}
       dayHeaderContent={(arg) => {
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
-          weekday: 'short', // Short weekday (e.g., Mon.)
-          day: '2-digit',   // Day before month
-          month: 'short',    // Full month name (e.g., November)
+          weekday: 'short', 
+          day: '2-digit',  
+          month: 'short',   
         }).format(arg.date);
         
-        return `${formattedDate}.`; // Add a dot after the weekday
+        return `${formattedDate}.`;
       }}
       eventTimeFormat={{
         hour: '2-digit',

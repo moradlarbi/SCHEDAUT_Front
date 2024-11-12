@@ -10,22 +10,22 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  CssBaseline
+  CssBaseline,Button
 } from '@mui/material';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-
+import { useAuth } from '../contexts/AuthContext';
 
 const drawerWidth = 240;
 
 const Layout: React.FC = () => {
-  // const { user, logout } = useAuth();
-  // const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // const handleLogout = () => {
-  //   // logout();
-  //   navigate('/login');
-  // };
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div style={{ display: 'flex' }}>
@@ -35,11 +35,11 @@ const Layout: React.FC = () => {
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             MyApp
           </Typography>
-          {/* {user && (
+          {user && (
             <Button color="inherit" onClick={handleLogout}>
               Logout
             </Button>
-          )} */}
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
