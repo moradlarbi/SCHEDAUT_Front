@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import Layout from './layouts/Layout';
+import UsersPage from './pages/UsersPage';
+import SallesPage from './pages/SallesPage';
 import { useAuth } from './contexts/AuthContext';
 
 const AppRoutes: React.FC = () => {
@@ -13,10 +15,12 @@ const AppRoutes: React.FC = () => {
             <Routes>
                 <Route path="/login" element={user==null ? <LoginPage /> : <Navigate to="/dashboard" />} />
                 <Route path="/signup" element={user==null ? <SignupPage /> : <Navigate to="/dashboard" />} />
-                <Route element={user ? <Layout /> : <LoginPage />}>
+                <Route element={!user ? <Layout /> : <LoginPage />}>
                     <Route path="/dashboard" element={<DashboardPage />}/>
-                    
+                    <Route path="/users" element={<UsersPage />}/>
+                    <Route path="/salles" element={<SallesPage />}/>
                     <Route path="/" element={<DashboardPage />}/>
+                    
 
                 </Route>
                 

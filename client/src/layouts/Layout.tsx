@@ -13,7 +13,7 @@ import {
   CssBaseline,Button
 } from '@mui/material';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import { Dashboard, MeetingRoom } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 const drawerWidth = 240;
@@ -55,9 +55,15 @@ const Layout: React.FC = () => {
           <List>
             <ListItem component={Link} to="/dashboard">
               <ListItemIcon>
-                <DashboardIcon />
+                <Dashboard />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem component={Link} to="/salles">
+              <ListItemIcon>
+                <MeetingRoom />
+              </ListItemIcon>
+              <ListItemText primary="Salles" />
             </ListItem>
           </List>
         </div>

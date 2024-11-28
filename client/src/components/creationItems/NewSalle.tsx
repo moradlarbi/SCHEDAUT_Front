@@ -10,55 +10,33 @@ import {
   InputAdornment,
   Typography,
   Switch,
-  InputLabel,
-  Select,
-  FormControl,
-  MenuItem,
   SelectChangeEvent
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { date, object, string, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addOperation, editOperation } from "../api/user";
+import { addOperation, editOperation } from "../../api/salle";
 import Swal from "sweetalert2";
-import { fetchClass } from "../api/user";
 
 const registerSchema = object({
-  last_name: string().nonempty("Le nom est obligatoire"),
-  first_name: string().nonempty("Le prénom est obligatoire"),
-  email: string().nonempty("L'email est obligatoire"),
-  password: string().nonempty("Le mot de passe est obligatoire"),
-  numPermis: string().nonempty("Le numero de permis est obligatoire"),
+  name: string().min(1,"Le nom est obligatoire"),
+  capacity: string().min(1,"Le nombre de places est obligatoire"),
 
 });
 
 type RegisterInput = TypeOf<typeof registerSchema>;
 
 const fields = [
-  { field: "last_name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
-  { field: "first_name", headerName: "Prénom", type: "string", add: true, edit: true, required: true },
-  { field: "email", headerName: "Email", type: "string", add: true, edit: true, required: true },
-  { field: "password", headerName: "Mot de passe", type: "password", add: true, edit: true, required: true },
-  { field: "numPermis", headerName: "N° Permis", type: "number", add: true, edit: true, required: true },
-  { field: "date_begin", headerName: "Date du début", type: "date", add: true, edit: true },
-  { field: "idCamion", headerName: "Camion", type: "select", flex: 1, add: true, edit: true, required: true },
-  {
-    field: "sexe",
-    headerName: "Genre",
-    type: "checkbox",
-  },
+  { field: "name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
+  { field: "capacity", headerName: "N° de place", type: "number", add: true, edit: true, required: true},
   {
     field: "active",
     headerName: "Etat",
     type: "checkbox",
   },
 ];
-interface Camion {
-  id: string;
-  matricule: string;
-}
-interface NewUserProps {
+interface NewItemProps {
   open: boolean;
   handleClose: () => void;
   handleCloseUpdated: () => void;
@@ -67,26 +45,12 @@ interface NewUserProps {
   setItem: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
+const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
   const [checked, setChecked] = useState(false);
-  const [checkedSexe, setCheckedSexe] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
-  const [camions, setCamions] = useState<Camion[]>([]);
-  const [idCamion, setIdCamion] = useState<string>("")
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchClass();
-        setCamions(data);
-      } catch (error) {
-        console.error("Failed to fetch Camions", error);
-      }
-    };
-    fetchData();
-  }, []);
+ 
   const addOne = async (values: RegisterInput) => {
-    let nom = values.last_name;
-    let newValues = { ...values,idCamion, idRole: 1, active: !checked, sexe: checkedSexe };
+    let newValues = { ...values, active: !checked };
     console.log(newValues);
 
     await addOperation({...newValues})
@@ -96,7 +60,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${nom} a bien été ajouté`,
+            title: `${values.name} a bien été ajouté`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -105,7 +69,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${nom} n'a pas été ajouté`,
+            title: `${values.name} n'a pas été ajouté`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -116,7 +80,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${nom} n'a pas été ajouté`,
+          title: `${values.name} n'a pas été ajouté`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -132,7 +96,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${values.last_name} a bien été mis a jour`,
+            title: `${values.name} a bien été mis a jour`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -141,7 +105,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${values.last_name} n'a pas mis a jour`,
+            title: `${values.name} n'a pas mis a jour`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -151,7 +115,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${values.last_name} n'a pas mis a jour`,
+          title: `${values.name} n'a pas mis a jour`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -198,10 +162,6 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
     setFieldsChanged(true);
     setRefresh(!refresh);
   };
-  const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setIdCamion(event.target.value as string);
-  };
-  useEffect(() => {}, [item]);
 
   return (
     <Dialog open={open} onClose={fieldsChanged ? handleCloseUpdated : handleClose} maxWidth={false} sx={{zIndex:"130"}}>
@@ -218,10 +178,10 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Chauffeur
+                fiche Salle
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche chauffeur : créer un chauffeur .
+                Fiche Salle : créer une salle.
               </Typography>
             </Box>
             <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
@@ -231,23 +191,6 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
               sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 10px", marginTop: "10px", minWidth: 500 }}
             >
               {fields.filter((c) => c.add).map((col) => (
-                col.type === "select" ? (
-                  <FormControl key={col.field} fullWidth>
-                    <InputLabel>{col.headerName}</InputLabel>
-                    <Select
-                      label={col.headerName}
-                      value={idCamion}
-                      onChange={handleSelectChange}
-                      error={!!(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]}
-                    >
-                      {camions.map((camion) => (
-                        <MenuItem key={camion.id} value={camion.id}>
-                          {camion.matricule}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                ) : (
                   <TextField
                     key={col.field}
                     fullWidth
@@ -261,18 +204,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
                       endAdornment: <InputAdornment position="start"></InputAdornment>,
                     }}
                   />
-                )
               ))}
-            </Box>
-            <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>Genre</Typography>
-              <Switch
-                checked={checkedSexe}
-                onChange={(e) => setCheckedSexe(e.target.checked)}
-                inputProps={{ "aria-label": "controlled" }}
-                sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-              />
-              <Typography>{checkedSexe ? 'Homme' : 'Femme'}</Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <Typography>En sommeil</Typography>
@@ -304,10 +236,10 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Chauffeur
+                fiche Salle
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche chauffeur : mettre a jour un chauffeur .
+                Fiche salle : mettre a jour une salle .
               </Typography>
             </Box>
             <CloseIcon onClick={fieldsChanged ? handleCloseUpdated : handleClose} sx={{ cursor: "pointer" }} />
@@ -317,37 +249,6 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
               sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 10px", marginTop: "10px", minWidth: 500 }}
             >
               {fields.filter((c) => c.edit).map((col) => (
-                col.type === "select" ? (
-                  <FormControl key={col.field} fullWidth required={col.required}>
-                    <InputLabel>{col.headerName}</InputLabel>
-                    <Select
-                      label={col.headerName}
-                      name={col.field}
-                      value={item[col.field] || ""}
-                      onChange={(event) => handleChangeUpdate(event as SelectChangeEvent<any>)}
-                    >
-                      {camions.map((camion) => (
-                        <MenuItem key={camion.id} value={camion.id}>
-                          {camion.matricule}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                ) : (col.type === "date" ? (
-                  <TextField
-                    key={col.field}
-                    fullWidth
-                    label={col.headerName}
-                    type={col.type}
-                    name={col.field}
-                    value={item[col.field].split("T")[0]}
-                    onChange={(event) => handleChangeUpdate(event as React.ChangeEvent<HTMLInputElement>)}
-                    required={col.required}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-                  />
-                ): (
                   <TextField
                     key={col.field}
                     fullWidth
@@ -361,21 +262,7 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
                       endAdornment: <InputAdornment position="start"></InputAdornment>,
                     }}
                   />
-                ))
               ))}
-            </Box>
-            <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>Genre</Typography>
-              <Switch
-                checked={item.sexe}
-                onChange={(e) => {
-                  setItem({ ...item, sexe: e.target.checked });
-                  setRefresh(!refresh);
-                }}
-                inputProps={{ "aria-label": "controlled" }}
-                sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-              />
-              <Typography>{item.sexe ? 'Homme' : 'Femme'}</Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <Typography>En sommeil</Typography>
@@ -402,4 +289,4 @@ const NewUser: React.FC<NewUserProps> = ({ open, handleClose, handleCloseUpdated
   );
 };
 
-export default NewUser;
+export default NewSalle;

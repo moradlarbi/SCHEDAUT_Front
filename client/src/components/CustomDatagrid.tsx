@@ -127,20 +127,16 @@ export default function CustomDataGrid({
     setLoading(true);
     axios
       .get(
-        `${fetchurl}&pagination[page]=${
-          Number(state.page) + 1
-        }&pagination[pageSize]=${state.pageSize}&sort[0]=${state.sort.field}:${
-          state.sort.sort
-        }`,
+        `${fetchurl}`,
       )
       .then((res: AxiosResponse<any, any>) => {
         if (res.status == 200) {
-          //console.log(res.data)
+          console.log(res.data)
           dispatch({
             type: "ROWS",
             payload: {
-              data: res.data,
-              total: res.data?.length,
+              data: res.data.data,
+              total: res.data.data?.length,
             },
           });
           setLoading(false);
