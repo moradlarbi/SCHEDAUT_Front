@@ -1,6 +1,7 @@
 import axios from "./axios";
 
 export const addOperation = (newData : any) => {
+  console.log(newData)
   return axios.post("/class", newData);
 };
 export const editOperation = (newData: any, id: number) => {
