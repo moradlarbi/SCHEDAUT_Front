@@ -1,16 +1,16 @@
 import axios from "./axios";
 
 export const addOperation = (newData : any) => {
-  return axios.post("/class", newData);
+  return axios.post("/salle", newData);
 };
 export const editOperation = (newData: any, id: number) => {
-  return axios.put(`/class/${id}`, newData);
+  return axios.put(`/salle/${id}`, newData);
 };
 export const editStatus = (newData: any, id: number) => {
-  return axios.put(`/class/active/${id}`, newData);
+  return axios.put(`/salle/active/${id}`, newData);
 };
 export const deleteOperation = (id: number) => {
   return axios.delete(
-    `/class/${id}`
+    `/salle/${id}`
   );
 };

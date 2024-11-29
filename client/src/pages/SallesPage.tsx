@@ -5,12 +5,11 @@ import CustomDataGrid from '../components/CustomDatagrid';
 import { Columns } from '../types';
 import {  useTheme } from "@mui/material/styles";
 import { GridCellParams } from '@mui/x-data-grid';
-import { editOperation, editStatus } from '../api/user';
+import { editOperation, editStatus } from '../api/salle';
 import Swal from 'sweetalert2';
 import {Border} from '../components/Border';
-import NewUser from '../components/creationItems/NewUser';
-import moment from 'moment';
-const UsersPage = () => {
+import NewSalle from '../components/creationItems/NewSalle';
+const SallesPage = () => {
     const [refresh, setrefresh] = useState(false);
     const theme = useTheme()
     const [selectedRows, setSelectedRows] = useState<number[]>();
@@ -25,16 +24,8 @@ const UsersPage = () => {
     }
     const columns: Columns[] = [
         { field: "id", headerName: "Réf", type: "string", width: 100 },
-        { field: "last_name", headerName: "Nom", type: "string", flex: 1, add: true,edit: true,},
-        { field: "first_name", headerName: "Prénom", type: "string", flex: 1, add: true,edit: true,},
-        { field: "numPermis", headerName: "N° permis", type: "string", flex: 1, add: true,edit: true,},
-        { field: "sexe", headerName: "Sexe", type: "string", flex: 1,valueGetter: (params: any) =>  {
-          return `${params? "Homme":"Femme"}`
-        }, add: true,edit: true,},
-        { field: "date_begin", headerName: "Date début", type: "string", flex: 1,valueGetter: (params: any) =>  {
-          return moment(params).format('DD/MM/YYYY');
-        }, add: true,edit: true,},
-        { field: "matricule", headerName: "N° camion", type: "string", flex: 1, add: true,edit: true},
+        { field: "name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
+        { field: "capacity", headerName: "N° de place", type: "number", add: true, edit: true, required: true },
         {
             field: "active",
             headerName: "Etat",
@@ -155,7 +146,7 @@ const UsersPage = () => {
 
   return (
       <>
-      {openDialog && <NewUser handleClose={() => setOpenDialog(false)} handleCloseUpdated={() => {
+      {openDialog && <NewSalle handleClose={() => setOpenDialog(false)} handleCloseUpdated={() => {
             Swal.fire({
               icon: "warning",
               title: "Êtes-vous sûr ?",
@@ -176,8 +167,8 @@ const UsersPage = () => {
           }} handleRefresh={() => setrefresh(!refresh)} open={openDialog} item={item} setItem={setItem} />}
     <Box>
         <Border
-        title="Utilisateurs"
-        subtitle="Visualiser, modifier ou gérer vos utilisateurs."
+        title="Salles"
+        subtitle="Visualiser, modifier ou gérer vos salles."
         actions={[
             {
                 label: `Désactiver (${
@@ -193,7 +184,7 @@ const UsersPage = () => {
                         Swal.fire({
                           position: "center",
                           icon: "success",
-                          title: `${res.data.last_name ?? "Utilisateur"} a bien été désactivé`,
+                          title: `${res.data.name ?? "Salle"} a bien été désactivé`,
                           showConfirmButton: false,
                           timer: 1500,
                         });
@@ -203,7 +194,7 @@ const UsersPage = () => {
                         Swal.fire({
                           position: "center",
                           icon: "error",
-                          title: `${res.data.last_name ?? "Utilisateur"} n'a pas été désactivé`,
+                          title: `${res.data.name ?? "Salle"} n'a pas été désactivé`,
                           showConfirmButton: false,
                           timer: 1500,
                         });
@@ -214,7 +205,7 @@ const UsersPage = () => {
                         Swal.fire({
                           position: "center",
                           icon: "error",
-                          title: `Utilisateur n'a pas été désactivé`,
+                          title: `Salle n'a pas été désactivé`,
                           showConfirmButton: false,
                           timer: 1500,
                         });
@@ -238,7 +229,7 @@ const UsersPage = () => {
               },
             },
           {
-            label: "Ajouter un chauffeur",
+            label: "Ajouter une salle",
             icon: <Add />,
             action: () => {
                 setItem({})
@@ -264,7 +255,7 @@ const UsersPage = () => {
           }}
           checkboxSelection
           refreshParent={refresh}
-          fetchurl={`/user?populate=*&filters[idRole][$eq]=1&sort=id:ASC`}
+          fetchurl={`/salle`}
           columns={columns}
           sx={{
             fontSize: 12,
@@ -277,4 +268,4 @@ const UsersPage = () => {
   )
 }
 
-export default UsersPage;
+export default SallesPage;
