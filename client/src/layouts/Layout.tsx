@@ -59,6 +59,12 @@ const Layout: React.FC = () => {
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
+            <ListItem component={Link} to="/users">
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary="Utilisateurs" />
+            </ListItem>
             <ListItem component={Link} to="/salles">
               <ListItemIcon>
                 <MeetingRoom />

@@ -28,13 +28,10 @@ const UsersPage = () => {
         { field: "last_name", headerName: "Nom", type: "string", flex: 1, add: true,edit: true,},
         { field: "first_name", headerName: "Prénom", type: "string", flex: 1, add: true,edit: true,},
         { field: "numPermis", headerName: "N° permis", type: "string", flex: 1, add: true,edit: true,},
-        { field: "sexe", headerName: "Sexe", type: "string", flex: 1,valueGetter: (params: any) =>  {
-          return `${params? "Homme":"Femme"}`
-        }, add: true,edit: true,},
-        { field: "date_begin", headerName: "Date début", type: "string", flex: 1,valueGetter: (params: any) =>  {
-          return moment(params).format('DD/MM/YYYY');
-        }, add: true,edit: true,},
-        { field: "matricule", headerName: "N° camion", type: "string", flex: 1, add: true,edit: true},
+        { field: "role", headerName: "Role", type: "string", add: true, edit: true, required: true },
+        { field: "password", headerName: "Mot de passe", type: "password", add: true, edit: true, required: true },
+        { field: "idClasses", headerName: "Class", type: "string", flex: 1, add: true, edit: true, required: false },
+        { field: "idCourses", headerName: "Courses", type: "string", flex: 1, add: true, edit: true, required: false },
         {
             field: "active",
             headerName: "Etat",
@@ -264,7 +261,7 @@ const UsersPage = () => {
           }}
           checkboxSelection
           refreshParent={refresh}
-          fetchurl={`/user?populate=*&filters[idRole][$eq]=1&sort=id:ASC`}
+          fetchurl={`/users`}
           columns={columns}
           sx={{
             fontSize: 12,
