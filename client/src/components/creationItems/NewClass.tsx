@@ -14,14 +14,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
-import { date, number, object, string, TypeOf } from "zod";
+import { object, string, TypeOf, number } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addOperation, editOperation } from "../../api/salle";
+import { addOperation, editOperation } from "../../api/class";
 import Swal from "sweetalert2";
 
 const registerSchema = object({
   name: string().min(1,"Le nom est obligatoire"),
-  capacity: number().min(1,"Le nombre de places est obligatoire"),
+  nb_stud: number().min(1,"Le nombre d'étudiants est obligatoire"),
 
 });
 
@@ -29,7 +29,7 @@ type RegisterInput = TypeOf<typeof registerSchema>;
 
 const fields = [
   { field: "name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
-  { field: "capacity", headerName: "N° de place", type: "number", add: true, edit: true, required: true},
+  { field: "nb_stud", headerName: "Nombre d'étudiants", type: "number", add: true, edit: true, required: true},
   {
     field: "active",
     headerName: "Etat",
@@ -45,7 +45,7 @@ interface NewItemProps {
   setItem: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
+const NewClass: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
   const [checked, setChecked] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
  
@@ -178,10 +178,10 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Salle
+                fiche Classe
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche Salle : créer une salle.
+                Fiche Classe : créer une classe.
               </Typography>
             </Box>
             <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
@@ -197,9 +197,9 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
                     label={col.headerName}
                     type={col.type}
                     {...register(col.field as keyof RegisterInput, 
-                      col.type === "number" 
-                        ? { setValueAs: (v) => (v === "" ? undefined : Number(v)) } 
-                        : {}
+                        col.type === "number" 
+                          ? { setValueAs: (v) => (v === "" ? undefined : Number(v)) } 
+                          : {}
                     )}
                     required={col.required}
                     error={!!(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]}
@@ -240,10 +240,10 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Salle
+                fiche Classe
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche salle : mettre a jour une salle .
+                Fiche classe : mettre a jour une classe .
               </Typography>
             </Box>
             <CloseIcon onClick={fieldsChanged ? handleCloseUpdated : handleClose} sx={{ cursor: "pointer" }} />
@@ -273,7 +273,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
               <Switch
                 checked={item.active == 0}
                 onChange={(e) => {
-                  setItem({ ...item, active: e.target.checked ? 0: 1  });
+                  setItem({ ...item, active: e.target.checked ? 0: 1 });
                   setRefresh(!refresh);
                 }}
                 inputProps={{ "aria-label": "controlled" }}
@@ -293,4 +293,4 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
   );
 };
 
-export default NewSalle;
+export default NewClass;

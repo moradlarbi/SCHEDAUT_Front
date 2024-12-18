@@ -65,6 +65,18 @@ const Layout: React.FC = () => {
               </ListItemIcon>
               <ListItemText primary="Salles" />
             </ListItem>
+            <ListItem component={Link} to="/classes">
+              <ListItemIcon>
+                <MeetingRoom />
+              </ListItemIcon>
+              <ListItemText primary="Classes" />
+            </ListItem>
+            <ListItem component={Link} to="/courses">
+              <ListItemIcon>
+                <MeetingRoom />
+              </ListItemIcon>
+              <ListItemText primary="Modules" />
+            </ListItem>
           </List>
         </div>
       </Drawer>
