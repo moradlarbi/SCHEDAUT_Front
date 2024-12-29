@@ -20,19 +20,18 @@ import { addOperation, editOperation } from "../../api/salle";
 import Swal from "sweetalert2";
 
 const registerSchema = object({
-  name: string().min(1,"Le nom est obligatoire"),
-  capacity: number().min(1,"Le nombre de places est obligatoire"),
-
+  name: string().min(1,"Name is required"),
+  capacity: number().min(1,"Number of seats is required"),
 });
 
 type RegisterInput = TypeOf<typeof registerSchema>;
 
 const fields = [
-  { field: "name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
-  { field: "capacity", headerName: "N° de place", type: "number", add: true, edit: true, required: true},
+  { field: "name", headerName: "Name", type: "string", add: true, edit: true, required: true },
+  { field: "capacity", headerName: "Number of seats", type: "number", add: true, edit: true, required: true},
   {
     field: "active",
-    headerName: "Etat",
+    headerName: "Status",
     type: "checkbox",
   },
 ];
@@ -60,7 +59,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${values.name} a bien été ajouté`,
+            title: `${values.name} has been added successfully`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -69,7 +68,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${values.name} n'a pas été ajouté`,
+            title: `${values.name} could not be added`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -80,7 +79,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${values.name} n'a pas été ajouté`,
+          title: `${values.name} could not be added`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -96,7 +95,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${values.name} a bien été mis a jour`,
+            title: `${values.name} has been updated successfully`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -105,7 +104,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${values.name} n'a pas mis a jour`,
+            title: `${values.name} could not be updated`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -115,7 +114,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${values.name} n'a pas mis a jour`,
+          title: `${values.name} could not be updated`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -178,10 +177,10 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Salle
+                Room Details
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche Salle : créer une salle.
+                Room Details: create a room.
               </Typography>
             </Box>
             <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
@@ -211,7 +210,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
               ))}
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>En sommeil</Typography>
+              <Typography>Inactive</Typography>
               <Switch
                 checked={checked}
                 onChange={(e) => setChecked(e.target.checked)}
@@ -221,9 +220,9 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Annuler</Button>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button variant="contained" type="submit">
-              Enregistrer
+              Save
             </Button>
           </DialogActions>
         </Box>
@@ -240,10 +239,10 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Salle
+                Room Details
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche salle : mettre a jour une salle .
+                Room Details: update a room.
               </Typography>
             </Box>
             <CloseIcon onClick={fieldsChanged ? handleCloseUpdated : handleClose} sx={{ cursor: "pointer" }} />
@@ -269,7 +268,7 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
               ))}
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>En sommeil</Typography>
+              <Typography>Inactive</Typography>
               <Switch
                 checked={item.active == 0}
                 onChange={(e) => {
@@ -282,9 +281,9 @@ const NewSalle: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={fieldsChanged ? handleCloseUpdated : handleClose}>Annuler</Button>
+            <Button onClick={fieldsChanged ? handleCloseUpdated : handleClose}>Cancel</Button>
             <Button variant="contained" type="submit" onClick={handleSubmitEdit}>
-              Mettre a jour
+              Update
             </Button>
           </DialogActions>
         </Box>

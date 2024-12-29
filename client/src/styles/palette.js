@@ -12,7 +12,7 @@ function createGradient(color1, color2) {
   const PRIMARY = {
     // lighter: "#a0ecff",
     light: "#E8F3FF",
-    main: "#0A70E2",
+    main: "#4e73df",
     dark: "#626262",
     darker: "#000000",
     contrastText: "#fff",

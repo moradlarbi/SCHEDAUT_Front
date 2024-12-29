@@ -20,19 +20,18 @@ import { addOperation, editOperation } from "../../api/course";
 import Swal from "sweetalert2";
 
 const registerSchema = object({
-  name: string().min(1,"Le nom est obligatoire"),
-  nb_hour: number().min(1,"Le nombre d'heure est obligatoire"),
-
+  name: string().min(1, "The name is required"),
+  nb_hour: number().min(1, "The number of hours is required"),
 });
 
 type RegisterInput = TypeOf<typeof registerSchema>;
 
 const fields = [
-  { field: "name", headerName: "Nom", type: "string", add: true, edit: true, required: true },
-  { field: "nb_hour", headerName: "Nombre d'heure", type: "number", add: true, edit: true, required: true},
+  { field: "name", headerName: "Name", type: "string", add: true, edit: true, required: true },
+  { field: "nb_hour", headerName: "Number of Hours", type: "number", add: true, edit: true, required: true },
   {
     field: "active",
-    headerName: "Etat",
+    headerName: "State",
     type: "checkbox",
   },
 ];
@@ -48,19 +47,19 @@ interface NewItemProps {
 const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
   const [checked, setChecked] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
- 
+
   const addOne = async (values: RegisterInput) => {
-    let newValues = { ...values, active: checked ? 0:1 };
+    let newValues = { ...values, active: checked ? 0 : 1 };
     console.log(newValues);
 
-    await addOperation({...newValues})
-      .then((res : any) => {
+    await addOperation({ ...newValues })
+      .then((res: any) => {
         console.log(res);
         if (res.status === 201) {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${values.name} a bien été ajouté`,
+            title: `${values.name} was successfully added`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -69,7 +68,7 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${values.name} n'a pas été ajouté`,
+            title: `${values.name} could not be added`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -80,7 +79,7 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${values.name} n'a pas été ajouté`,
+          title: `${values.name} could not be added`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -89,14 +88,14 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
 
   const editOne = async (values: any) => {
     console.log(values);
-    await editOperation({...values}, values.id)
+    await editOperation({ ...values }, values.id)
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: `${values.name} a bien été mis a jour`,
+            title: `${values.name} was successfully updated`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -105,7 +104,7 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
           Swal.fire({
             position: "center",
             icon: "error",
-            title: `${values.name} n'a pas mis a jour`,
+            title: `${values.name} could not be updated`,
             showConfirmButton: false,
             timer: 1500,
           });
@@ -115,7 +114,7 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
         Swal.fire({
           position: "center",
           icon: "error",
-          title: `${values.name} n'a pas mis a jour`,
+          title: `${values.name} could not be updated`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -140,7 +139,7 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
   const onSubmitHandler: SubmitHandler<RegisterInput> = (values: any) => {
     if (Object.keys(errors).length === 0) {
       addOne(values);
-      console.log(values)
+      console.log(values);
       handleClose();
     }
   };
@@ -158,13 +157,13 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
     } else {
       setItem({ ...item, [event.target.name]: event.target.value });
     }
-    console.log(event.target)
+    console.log(event.target);
     setFieldsChanged(true);
     setRefresh(!refresh);
   };
 
   return (
-    <Dialog open={open} onClose={fieldsChanged ? handleCloseUpdated : handleClose} maxWidth={false} sx={{zIndex:"130"}}>
+    <Dialog open={open} onClose={fieldsChanged ? handleCloseUpdated : handleClose} maxWidth={false} sx={{ zIndex: "130" }}>
       {Object.keys(item).length === 0 ? (
         <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmitHandler)}>
           <DialogTitle
@@ -178,10 +177,10 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Module
+                Module Form
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche Module : créer un module.
+                Module Form: Create a module.
               </Typography>
             </Box>
             <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
@@ -191,27 +190,28 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
               sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 10px", marginTop: "10px", minWidth: 500 }}
             >
               {fields.filter((c) => c.add).map((col) => (
-                  <TextField
-                    key={col.field}
-                    fullWidth
-                    label={col.headerName}
-                    type={col.type}
-                    {...register(col.field as keyof RegisterInput, 
-                        col.type === "number" 
-                          ? { setValueAs: (v) => (v === "" ? undefined : Number(v)) } 
-                          : {}
-                    )}
-                    required={col.required}
-                    error={!!(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]}
-                    helperText={(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]?.message}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-                  />
+                <TextField
+                  key={col.field}
+                  fullWidth
+                  label={col.headerName}
+                  type={col.type}
+                  {...register(
+                    col.field as keyof RegisterInput,
+                    col.type === "number"
+                      ? { setValueAs: (v) => (v === "" ? undefined : Number(v)) }
+                      : {}
+                  )}
+                  required={col.required}
+                  error={!!(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]}
+                  helperText={(errors as FieldErrors<RegisterInput>)[col.field as keyof RegisterInput]?.message}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="start"></InputAdornment>,
+                  }}
+                />
               ))}
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>En sommeil</Typography>
+              <Typography>On Hold</Typography>
               <Switch
                 checked={checked}
                 onChange={(e) => setChecked(e.target.checked)}
@@ -221,9 +221,9 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Annuler</Button>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button variant="contained" type="submit">
-              Enregistrer
+              Save
             </Button>
           </DialogActions>
         </Box>
@@ -240,10 +240,10 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
           >
             <Box>
               <Typography sx={{ mt: 2 }} variant="h1" color={"primary.main"}>
-                fiche Module
+                Module Form
               </Typography>
               <Typography sx={{ pt: 2 }} variant="h3" color={"secondary"}>
-                Fiche Module : mettre a jour un module .
+                Module Form: Update a module.
               </Typography>
             </Box>
             <CloseIcon onClick={fieldsChanged ? handleCloseUpdated : handleClose} sx={{ cursor: "pointer" }} />
@@ -253,27 +253,27 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
               sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 10px", marginTop: "10px", minWidth: 500 }}
             >
               {fields.filter((c) => c.edit).map((col) => (
-                  <TextField
-                    key={col.field}
-                    fullWidth
-                    label={col.headerName}
-                    type={col.type}
-                    name={col.field}
-                    value={item[col.field]}
-                    onChange={(event) => handleChangeUpdate(event as React.ChangeEvent<HTMLInputElement>)}
-                    required={col.required}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-                  />
+                <TextField
+                  key={col.field}
+                  fullWidth
+                  label={col.headerName}
+                  type={col.type}
+                  name={col.field}
+                  value={item[col.field]}
+                  onChange={(event) => handleChangeUpdate(event as React.ChangeEvent<HTMLInputElement>)}
+                  required={col.required}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="start"></InputAdornment>,
+                  }}
+                />
               ))}
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <Typography>En sommeil</Typography>
+              <Typography>On Hold</Typography>
               <Switch
                 checked={item.active == 0}
                 onChange={(e) => {
-                  setItem({ ...item, active:  e.target.checked ? 0: 1  });
+                  setItem({ ...item, active: e.target.checked ? 0 : 1 });
                   setRefresh(!refresh);
                 }}
                 inputProps={{ "aria-label": "controlled" }}
@@ -282,9 +282,9 @@ const NewCourse: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdat
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={fieldsChanged ? handleCloseUpdated : handleClose}>Annuler</Button>
+            <Button onClick={fieldsChanged ? handleCloseUpdated : handleClose}>Cancel</Button>
             <Button variant="contained" type="submit" onClick={handleSubmitEdit}>
-              Mettre a jour
+              Update
             </Button>
           </DialogActions>
         </Box>

@@ -1,106 +1,99 @@
-// src/pages/SignupPage.tsx
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import '../styles/LoginPage.css'; // Ajouter un fichier CSS pour la page d'inscription (optionnel)
 
 const SignupPage: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [sexe, setSexe] = useState(false); // false for female, true for male
-    const [error, setError] = useState('');
     const { login } = useAuth();
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            // Prepare the username by concatenating nom and prenom
-            const username = `${firstName} ${lastName}`;
-
-            // Make the API request to signup
-            const response = await axios.post('/api/auth/signup', {
-                email,
-                password,
-                firstName,
-                lastName
-            });
-            console.log(response)
-
-            // On successful signup, login the user
-            login(email, password)
-
-            // Redirect to the dashboard page
-            window.location.href = '/dashboard';
-        } catch (err) {
-            if (axios.isAxiosError(err)) {
-                console.log(err)
-                setError(err?.response?.data.message || 'An error occurred during signup.');
-            } else {
-                setError('An error occurred during signup.');
-            }
+            // Inscription et connexion
+            await login(email, password); // Connexion après inscription
+            setError(null);
+            window.location.href = '/dashboard'; // Redirection vers le tableau de bord après inscription
+        } catch (error) {
+            setError('Failed to sign up. Please check your details.');
         }
     };
 
     return (
-        <Container maxWidth="sm">
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="100vh"
-            >
-                <Typography variant="h4" gutterBottom>Sign Up</Typography>
+        <div className='body'>
+        <div className="container">
+            <div className="form-box signup">
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="First Name"
-                        fullWidth
-                        margin="normal"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
-                    <TextField
-                        label="Last Name"
-                        fullWidth
-                        margin="normal"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
-                    <TextField
-                        label="Email"
-                        type="email"
-                        fullWidth
-                        margin="normal"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <TextField
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        margin="normal"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {/* <FormControl component="fieldset" margin="normal">
-                        <FormLabel component="legend">Sexe</FormLabel>
-                        <RadioGroup
-                            value={sexe ? 'male' : 'female'}
-                            onChange={(e) => setSexe(e.target.value === 'male')}
-                        >
-                            <FormControlLabel value="female" control={<Radio />} label="Student" />
-                            <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        </RadioGroup>
-                    </FormControl> */}
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Sign Up
-                    </Button>
-                    {error && <Typography color="error" variant="body2">{error}</Typography>}
+                    <h1>Sign Up</h1>
+                    <div className="input-box">
+                        <input
+                            type="text"
+                            placeholder="First Name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-user"></i>
+                    </div>
+                    <div className="input-box">
+                        <input
+                            type="text"
+                            placeholder="Last Name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-user"></i>
+                    </div>
+                    <div className="input-box">
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-user"></i>
+                    </div>
+                    <div className="input-box">
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-lock-alt"></i>
+                    </div>
+                    {error && <p className="error-message">{error}</p>}
+                    <button type="submit" className="btn">Sign Up</button>
+                    
+                    <p>or Sign Up with Social Platforms</p>
+                    <div className="social-icons">
+                        <a href="#"><i className="bx bxl-google"></i></a>
+                        <a href="#"><i className="bx bxl-facebook"></i></a>
+                        <a href="#"><i className="bx bxl-github"></i></a>
+                        <a href="#"><i className="bx bxl-linkedin"></i></a>
+                    </div>
                 </form>
-            </Box>
-        </Container>
+            </div>
+
+            <div className="toggle-box">
+                <div className="toggle-panel toggle-left">
+                <h1>Welcome Back!</h1>
+                    <p>Already have an Account?</p>
+                    <Link to="/login">
+                        <button className="btn login-btn">Login</button>
+                    </Link>
+                </div>
+               
+            </div>
+        </div>
+        </div>
     );
 };
 

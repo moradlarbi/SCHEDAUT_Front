@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Typography, Link } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom'; // Importer Link pour la navigation entre pages
+import '../styles/LoginPage.css'; // Importer le fichier CSS contenant vos styles
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -19,41 +20,62 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="sm">
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="100vh"
-            >
-                <Typography variant="h4" gutterBottom>Login</Typography>
+        <div className='body'>
+        <div className="container">
+            <div className="form-box login">
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Email"
-                        fullWidth
-                        margin="normal"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <TextField
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        margin="normal"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {error && <Typography color="error">{error}</Typography>}
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Login
-                    </Button>
+                    <h1>Login</h1>
+                    <div className="input-box">
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-user"></i>
+                    </div>
+                    <div className="input-box">
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <i className="bx bxs-lock-alt"></i>
+                    </div>
+                    {error && <p className="error-message">{error}</p>}
+                    <button type="submit" className="btn">Login</button>
+                    
+                    <p>or Login with Social Platforms</p>
+                    <div className="social-icons">
+                        <a href="#"><i className="bx bxl-google"></i></a>
+                        <a href="#"><i className="bx bxl-facebook"></i></a>
+                        <a href="#"><i className="bx bxl-github"></i></a>
+                        <a href="#"><i className="bx bxl-linkedin"></i></a>
+                    </div>
                 </form>
-                <Typography variant="body2" align="center" marginTop={2}>
-                    Don't have an account? <Link href="/signup" color="primary">Sign Up</Link>
-                </Typography>
-            </Box>
-        </Container>
+            </div>
+
+            <div className="toggle-box">
+                <div className="toggle-panel toggle-left">
+                    <h1>Hello, Welcome!</h1>
+                    <p>Don't have an Account?</p>
+                    <Link to="/signup">
+                        <button className="btn register-btn">Register</button>
+                    </Link>
+                </div>
+                <div className="toggle-panel toggle-right">
+                    <h1>Welcome Back!</h1>
+                    <p>Already have an Account?</p>
+                    <Link to="/login">
+                        <button className="btn login-btn">Login</button>
+                    </Link>
+                </div>
+            </div>
+        </div>
+        </div>
     );
 };
 
