@@ -30,8 +30,8 @@ const CoursePage = () => {
 
   const columns: Columns[] = [
     { field: 'id', headerName: 'Ref', type: 'string', width: 100 },
-    { field: 'name', headerName: 'Name', type: 'string', add: true, edit: true, required: true },
-    { field: 'capacity', headerName: 'Capacity', type: 'number', add: true, edit: true, required: true },
+    { field: 'name', headerName: 'Name', type: 'string', add: true, edit: true, required: true,width:200 },
+    { field: 'nb_hour', headerName: "Nombre d'heures", type: 'number', add: true, edit: true, required: true },
     {
       field: 'active',
       headerName: 'Status',

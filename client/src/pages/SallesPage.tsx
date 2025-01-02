@@ -25,7 +25,7 @@ const SallesPage = () => {
     const columns: Columns[] = [
         { field: "id", headerName: "Ref", type: "string", width: 100 },
         { field: "name", headerName: "Name", type: "string", add: true, edit: true, required: true },
-        { field: "capacity", headerName: "Number of Seats", type: "number", add: true, edit: true, required: true },
+        { field: "capacity", headerName: "Number of Seats",width:150, type: "number", add: true, edit: true, required: true },
         {
             field: "active",
             headerName: "State",

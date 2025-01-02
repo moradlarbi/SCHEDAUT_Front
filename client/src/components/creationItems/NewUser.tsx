@@ -14,11 +14,13 @@ import {
   Select,
   FormControl,
   MenuItem,
-  SelectChangeEvent
+  SelectChangeEvent,
+  Checkbox,
+  ListItemText
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm, SubmitHandler, FieldErrors, Controller } from "react-hook-form";
-import { object, array, string, TypeOf } from "zod";
+import { object, array, string,number, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addOperation, editOperation, fetchCourse } from "../../api/user";
 import Swal from "sweetalert2";
@@ -30,8 +32,6 @@ const registerSchema = object({
   email: string().nonempty("Email is required"),
   password: string().nonempty("Password is required"),
   role: string().nonempty("Role is required"),
-  classes: array(string()).optional(),
-  courses: array(string()).optional()
 });
 
 type RegisterInput = TypeOf<typeof registerSchema>;
@@ -40,10 +40,8 @@ const fields = [
   { field: "last_name", headerName: "Last Name", type: "string", add: true, edit: true, required: true },
   { field: "first_name", headerName: "First Name", type: "string", add: true, edit: true, required: true },
   { field: "email", headerName: "Email", type: "string", add: true, edit: true, required: true },
-  { field: "role", headerName: "Role", type: "select", add: true, edit: true, required: true },
+  { field: "role", headerName: "Role", type: "select", add: true, edit: false, required: true },
   { field: "password", headerName: "Password", type: "password", add: true, edit: true, required: true },
-  { field: "idClasses", headerName: "Class", type: "select", flex: 1, add: true, edit: true, required: false },
-  { field: "idCourses", headerName: "Courses", type: "select", flex: 1, add: true, edit: true, required: false },
   {
     field: "active",
     headerName: "Status",
@@ -75,7 +73,8 @@ const NewUser: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated
   const [fieldsChanged, setFieldsChanged] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
-  const [idCamion, setIdCamion] = useState<string>("");
+  const [idCourses, setIdCourses] = useState<string[]>([]);
+  const [idClass, setIdClass] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,8 +92,14 @@ const NewUser: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated
 
   const addOne = async (values: RegisterInput) => {
     let nom = values.last_name;
-    let newValues = { ...values, idCamion, active: !checked };
-
+    let newValues : any = values
+    if (values.role ==="student"){
+      newValues = { ...newValues, idClass, active: checked ? 0 : 1 };
+    }
+    else {
+      newValues = { ...newValues,idCourses, active: checked ? 0 : 1 };
+    }
+    console.log(newValues)
     await addOperation({ ...newValues })
       .then((res: any) => {
         if (res.status === 201) {
@@ -194,7 +199,7 @@ const NewUser: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated
   };
 
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setIdCamion(event.target.value as string);
+    setIdClass(event.target.value as string);
   };
 
   const role = watch("role");
@@ -241,44 +246,66 @@ const NewUser: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated
                 />
                 {errors.role && <Typography color="error">{errors.role.message}</Typography>}
               </FormControl>
-              {role === "student" && (
+              {role === "student" &&
                 <FormControl fullWidth>
-                  <InputLabel>Classes</InputLabel>
-                  <Controller
-                    name="classes"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field }) => (
-                      <Select {...field} multiple sx={{ maxWidth: 250 }} value={field.value || []}>
-                        {classes.map((classe) => (
-                          <MenuItem key={classe.id} value={classe.id}>
-                            {classe.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              )}
+                <InputLabel>Class</InputLabel>
+                <Select
+                  label="Class"
+                  value={idClass}
+                  onChange={handleSelectChange}
+                >
+                  {classes.map((cls) => (
+                    <MenuItem key={cls.id} value={cls.id}>
+                      {cls.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              }
               {role === "teacher" && (
                 <FormControl fullWidth>
                   <InputLabel>Courses</InputLabel>
-                  <Controller
-                    name="courses"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field }) => (
-                      <Select {...field} multiple sx={{ maxWidth: 250 }} value={field.value || []}>
-                        {courses.map((course) => (
-                          <MenuItem key={course.id} value={course.id}>
-                            {course.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
+                  <Select
+                    label="Courses"
+                    multiple
+                    value={idCourses}
+                    sx={{
+                      maxWidth:230,
+                    }}
+                    onChange={(event) => {
+                      const {
+                        target: { value },
+                      } = event;
+
+                      // Handle both select and deselect
+                      setIdCourses(typeof value === "string" ? value.split(",") : value);
+                    }}
+                    renderValue={(selected) =>
+                      courses
+                        .filter((course) => selected.includes(course.id))
+                        .map((course) => course.name)
+                        .join(", ")
+                    }
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 200,
+                          overflowY: "auto",
+                          maxWidth: 100,
+                        },
+                      },
+                    }}
+                  >
+                    {courses.map((course) => (
+                      <MenuItem key={course.id} value={course.id}>
+                        <Checkbox checked={idCourses.includes(course.id)} />
+                        {course.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
               )}
+
             </Box>
 
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -322,6 +349,66 @@ const NewUser: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated
                   }}
                 />
               ))}
+              {item.role === "student" &&
+                <FormControl fullWidth>
+                <InputLabel>Class</InputLabel>
+                <Select
+                  label="Class"
+                  value={item.idClass}
+                  onChange={(event) => {
+                    setItem({ ...item, idClass: event.target.value });
+                    setFieldsChanged(true);
+                    setRefresh(!refresh);
+                  }}
+                >
+                  {classes.map((cls) => (
+                    <MenuItem key={cls.id} value={cls.id}>
+                      {cls.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              }
+              {item.role === "teacher" && (
+                <FormControl fullWidth>
+                  <InputLabel>Courses</InputLabel>
+                  <Select
+                    label="Courses"
+                    multiple
+                    sx={{
+                      maxWidth: 230
+                    }}
+                    value={item.idCourses}
+                    onChange={(event) => {
+                      setItem({ ...item, idCourses: event.target.value });
+                      setFieldsChanged(true); // Indique que des champs ont été modifiés
+                      setRefresh(!refresh); // Force un rafraîchissement si nécessaire
+                    }}
+                    renderValue={(selected) =>
+                      courses
+                        .filter((course) => selected.includes(course.id))
+                        .map((course) => course.name)
+                        .join(", ")
+                    }
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 300, // Contrôle la hauteur maximale du menu déroulant
+                          maxWidth: 400, // Contrôle la largeur maximale du menu déroulant
+                        },
+                      },
+                    }}
+                  >
+                    {courses.map((course) => (
+                      <MenuItem key={course.id} value={course.id}>
+                        <Checkbox checked={item.idCourses.includes(course.id)} />
+                        <ListItemText primary={course.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
             </Box>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <Typography>Inactive</Typography>

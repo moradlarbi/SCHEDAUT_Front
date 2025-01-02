@@ -30,11 +30,9 @@ const UsersPage = () => {
         { field: "id", headerName: "Ref", type: "string", width: 100 },
         { field: "last_name", headerName: "Last Name", type: "string", flex: 1, add: true, edit: true, },
         { field: "first_name", headerName: "First Name", type: "string", flex: 1, add: true, edit: true, },
-        { field: "numPermis", headerName: "License Number", type: "string", flex: 1, add: true, edit: true, },
         { field: "role", headerName: "Role", type: "string", add: true, edit: true, required: true },
         { field: "password", headerName: "Password", type: "password", add: true, edit: true, required: true },
-        { field: "idClasses", headerName: "Class", type: "string", flex: 1, add: true, edit: true, required: false },
-        { field: "idCourses", headerName: "Courses", type: "string", flex: 1, add: true, edit: true, required: false },
+        { field: "name", headerName: "Class", type: "string", flex: 1, add: true, edit: false, required: false },
         {
             field: "active",
             headerName: "Status",

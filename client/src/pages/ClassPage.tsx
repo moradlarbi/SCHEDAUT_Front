@@ -24,7 +24,7 @@ const ClassPage = () => {
     const columns: Columns[] = [
         { field: "id", headerName: "Ref", type: "string", width: 100 },
         { field: "name", headerName: "Name", type: "string", add: true, edit: true, required: true },
-        { field: "nb_stud", headerName: "Number of Students", type: "number", add: true, edit: true, required: true },
+        { field: "nb_stud", headerName: "Number of Students", type: "number", add: true, edit: true, required: true,width: 150 },
         {
             field: "active",
             headerName: "Status",
@@ -107,7 +107,7 @@ const ClassPage = () => {
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: `${values.first_name} has been successfully updated`,
+                        title: `${values.name} has been successfully updated`,
                         showConfirmButton: false,
                         timer: 1500,
                     });
@@ -116,7 +116,7 @@ const ClassPage = () => {
                     Swal.fire({
                         position: "center",
                         icon: "error",
-                        title: `${values.first_name} could not be updated`,
+                        title: `${values.name} could not be updated`,
                         showConfirmButton: false,
                         timer: 1500,
                     });
@@ -126,7 +126,7 @@ const ClassPage = () => {
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: `${values.first_name} could not be updated`,
+                    title: `${values.name} could not be updated`,
                     showConfirmButton: false,
                     timer: 1500,
                 });
