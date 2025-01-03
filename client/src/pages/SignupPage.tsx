@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import '../styles/LoginPage.css'; // Ajouter un fichier CSS pour la page d'inscription (optionnel)
-
+import axios from 'axios';
 const SignupPage: React.FC = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -14,10 +14,17 @@ const SignupPage: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            // Inscription et connexion
-            await login(email, password); // Connexion après inscription
-            setError(null);
-            window.location.href = '/dashboard'; // Redirection vers le tableau de bord après inscription
+                const response = await axios.post('/api/auth/signup', {
+                    email,
+                    password,
+                    first_name:firstName,
+                    last_name:lastName,
+                    role: "admin"
+                });
+                console.log(response)
+                await login(email, password); // Connexion après inscription
+                setError(null);
+                window.location.href = '/dashboard'; // Redirection vers le tableau de bord après inscription
         } catch (error) {
             setError('Failed to sign up. Please check your details.');
         }

@@ -73,7 +73,7 @@ const Layout: React.FC = () => {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'regular',marginRight:'15px',color:'#4e73df' }}>
             {/* Titre ou logo */}
-            {/* {user?.first_name} {user?.last_name} */}
+            {user?.email}
           </Typography>
             <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
             <Avatar

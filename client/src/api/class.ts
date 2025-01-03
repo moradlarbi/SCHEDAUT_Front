@@ -14,3 +14,11 @@ export const deleteOperation = (id: number) => {
     `/class/${id}`
   );
 };
+export const fetchTeachers = async () => {
+  const response = await axios.get('/users/teacher');
+  return response.data.data;
+};
+export const fetchCourses = async () => {
+  const response = await axios.get('/course/active');
+  return response.data.data;
+};

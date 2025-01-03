@@ -11,13 +11,21 @@ import {
   Typography,
   Switch,
   SelectChangeEvent,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { object, string, TypeOf, number } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addOperation, editOperation } from "../../api/class";
+import { addOperation, editOperation, fetchCourses, fetchTeachers } from "../../api/class";
 import Swal from "sweetalert2";
+import { Delete } from "@mui/icons-material";
 
 const registerSchema = object({
   name: string().min(1, "The name is required"),
@@ -44,13 +52,45 @@ interface NewItemProps {
   item: any;
   setItem: React.Dispatch<React.SetStateAction<any>>;
 }
+interface Teacher {
+  id: string;
+  first_name: string;
+  last_name: string;
+  idCourses: string[];
+}
+
+interface Course {
+  id: string;
+  name: string;
+}
+
 
 const NewClass: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdated, handleRefresh, item, setItem }) => {
   const [checked, setChecked] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
+   const [courses, setCourses] = useState<Course[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [courseTeachers, setCourseTeachers] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedTeacher, setSelectedTeacher] = useState('');
+
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const dataTeachers = await fetchTeachers();
+          setTeachers(dataTeachers);
+          const dataCourse = await fetchCourses();
+          setCourses(dataCourse);
+          console.log(dataTeachers, dataCourse)
+        } catch (error) {
+          console.error("Failed to fetch data", error);
+        }
+      };
+      fetchData();
+    }, []);
 
   const addOne = async (values: RegisterInput) => {
-    let newValues = { ...values, active: checked ? 0 : 1 };
+    let newValues = { ...values,courseTeachers, active: checked ? 0 : 1 };
     console.log(newValues);
 
     await addOperation({ ...newValues })
@@ -207,7 +247,76 @@ const NewClass: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
                   }}
                 />
               ))}
+                <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                  <InputLabel>Course</InputLabel>
+                  <Select
+                    value={selectedCourse}
+                    onChange={(e) => setSelectedCourse(e.target.value)}
+                  >
+                    {courses.filter((course) => !courseTeachers.some((item) => item.idCourse === course.id)).map((course) => (
+                      <MenuItem key={course.id} value={course.id}>
+                        {course.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                  <InputLabel>Teacher</InputLabel>
+                  <Select
+                    value={selectedTeacher}
+                    onChange={(e) => setSelectedTeacher(e.target.value)}
+                  >
+                    {teachers
+                      .filter((teacher) => teacher.idCourses.includes(selectedCourse))
+                      .map((teacher) => (
+                        <MenuItem key={teacher.id} value={teacher.id}>
+                          {teacher.first_name} {teacher.last_name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+
+              <div>  
+                <List>
+                  {courseTeachers.map((item, index) => (
+                    <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div>
+                        Course: {courses.find((c) => c.id === item.idCourse)?.name} | Teacher:{" "}
+                        {teachers.find((t) => t.id === item.idTeacher)?.first_name}{" "}
+                        {teachers.find((t) => t.id === item.idTeacher)?.last_name}
+                      </div>
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          const updatedList = courseTeachers.filter((_, i) => i !== index);
+                          setCourseTeachers(updatedList);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+
             </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                if (selectedCourse && selectedTeacher) {
+                  setCourseTeachers([
+                    ...courseTeachers,
+                    { idCourse: selectedCourse, idTeacher: selectedTeacher },
+                  ]);
+                  setSelectedCourse('');
+                  setSelectedTeacher('');
+                }
+              }}
+            >
+              Add course
+            </Button>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <Typography>Inactive</Typography>
               <Switch
@@ -265,7 +374,79 @@ const NewClass: React.FC<NewItemProps> = ({ open, handleClose, handleCloseUpdate
                   }}
                 />
               ))}
+              <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                  <InputLabel>Course</InputLabel>
+                  <Select
+                    value={selectedCourse}
+                    onChange={(e) => setSelectedCourse(e.target.value)}
+                  >
+                    {courses.filter((course) => !item?.courseTeachers?.some((i : any) => i.idCourse === course.id)).map((course) => (
+                      <MenuItem key={course.id} value={course.id}>
+                        {course.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                  <InputLabel>Teacher</InputLabel>
+                  <Select
+                    value={selectedTeacher}
+                    onChange={(e) => setSelectedTeacher(e.target.value)}
+                  >
+                    {teachers
+                      .filter((teacher) => teacher.idCourses.includes(selectedCourse))
+                      .map((teacher) => (
+                        <MenuItem key={teacher.id} value={teacher.id}>
+                          {teacher.first_name} {teacher.last_name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+
+              <div>  
+                <List>
+                  {item?.courseTeachers.map((i : any, index : number) => (
+                    <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div>
+                        Course: {courses.find((c) => c.id === i.idCourse)?.name} | Teacher:{" "}
+                        {teachers.find((t) => t.id === i.idTeacher)?.first_name}{" "}
+                        {teachers.find((t) => t.id === i.idTeacher)?.last_name}
+                      </div>
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          const updatedList = item?.courseTeachers.filter((_ : any, i : any) => i !== index);
+                          setItem({ ...item, courseTeachers : updatedList});
+                          setFieldsChanged(true);
+                          setRefresh(!refresh);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
             </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                if (selectedCourse && selectedTeacher) {
+                  setItem({ ...item, courseTeachers : [
+                    ...item.courseTeachers,
+                    { idCourse: selectedCourse, idTeacher: selectedTeacher },
+                  ]});
+                  setFieldsChanged(true);
+                  setSelectedCourse('');
+                  setSelectedTeacher('');
+                  
+                }
+              }}
+            >
+              Add course
+            </Button>
             <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <Typography>Inactive</Typography>
               <Switch

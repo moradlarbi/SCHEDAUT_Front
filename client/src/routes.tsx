@@ -17,7 +17,7 @@ const AppRoutes: React.FC = () => {
             <Routes>
                 <Route path="/login" element={user==null ? <LoginPage /> : <Navigate to="/dashboard" />} />
                 <Route path="/signup" element={user==null ? <SignupPage /> : <Navigate to="/dashboard" />} />
-                <Route element={!user ? <Layout /> : <LoginPage />}>
+                <Route element={user ? <Layout /> : <LoginPage />}>
                     <Route path="/dashboard" element={<DashboardPage />}/>
                     <Route path="/users" element={<UsersPage />}/>
                     <Route path="/salles" element={<SallesPage />}/>
