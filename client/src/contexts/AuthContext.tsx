@@ -3,6 +3,7 @@ import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 interface User {
+  id: string;
   email: string;
   first_name: string;
   last_name: string;
@@ -61,12 +62,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { token, data } = response.data;
 
       localStorage.setItem('token', token); // Store token in localStorage
-      dispatch({ type: 'LOGIN', payload: { email: data.email,first_name: data.first_name, last_name: data.last_name, role : data.role} });
+      dispatch({ type: 'LOGIN', payload: { id: data.id,email: data.email,first_name: data.first_name, last_name: data.last_name, role : data.role} });
       if (data.role =="admin") {
         navigate('/users');
       }
       else {
-        navigate("/dashboard")
+        navigate("/calendar")
       }
     } catch (error) {
       console.error('Failed to login:', error);
@@ -76,9 +77,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
+      console.log("hey")
       await axios.get('/auth/logout');
       dispatch({ type: 'LOGOUT' });
       localStorage.removeItem('token'); // Remove token
+      console.log('State after logout:', state);
       navigate('/login');
     } catch (error) {
       console.error('Failed to logout:', error);

@@ -23,10 +23,13 @@ const AppRoutes: React.FC = () => {
                     <Route path="/salles" element={<SallesPage />}/>
                     <Route path="/classes" element={<ClassPage />}/>
                     <Route path="/courses" element={<CoursePage />}/>
-                    <Route path="/" element={<DashboardPage />}/>
+                    <Route path="/" element={<CalendarPage />}/>
                 </Route>
-                <Route path="/dashboard" element={user?.role =="teacher" ? <DashboardPage /> : <LoginPage />} />
-                
+                <Route element={user?.role =="teacher" ? <Layout /> : <LoginPage />}>
+                    <Route path="/calendar" element={<DashboardPage />}/>
+                    <Route path="*" element={<DashboardPage />}/>
+                </Route>
+               
                 
 
                 

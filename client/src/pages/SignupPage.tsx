@@ -24,7 +24,7 @@ const SignupPage: React.FC = () => {
                 console.log(response)
                 await login(email, password); // Connexion après inscription
                 setError(null);
-                window.location.href = '/dashboard'; // Redirection vers le tableau de bord après inscription
+                window.location.href = '/users'; // Redirection vers le tableau de bord après inscription
         } catch (error) {
             setError('Failed to sign up. Please check your details.');
         }

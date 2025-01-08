@@ -37,8 +37,9 @@ const Layout: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    console.log("hey2")
     logout();
-    navigate('/login');
+    //navigate('/login');
   };
 
   // Gestion de l'état du menu
@@ -113,7 +114,7 @@ const Layout: React.FC = () => {
       </AppBar>
 
       {/* Drawer */}
-      <Drawer
+      { <Drawer
         variant="permanent"
         sx={{
           width: drawerWidth,
@@ -176,10 +177,12 @@ const Layout: React.FC = () => {
             ))}
           </List>
 
-          <Divider sx={{ marginY: 1 }} />
+          
 
           {/* Utilities Section */}
-          <Typography
+          {user?.role =="admin" &&<>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography
             variant="subtitle2"
             sx={{ padding: '8px 16px', color: '#f8f9fc', fontWeight: 'regular',fontSize:'15px' }}
           >
@@ -219,6 +222,8 @@ const Layout: React.FC = () => {
               </ListItem>
             ))}
           </List>
+          </>}
+          
 
           <Divider sx={{ marginY: 1 }} />
 
@@ -230,11 +235,12 @@ const Layout: React.FC = () => {
             Authentication
           </Typography>
           <List>
-            {[{ text: 'Logout', icon: <LogoutIcon />, to: '/login' },{ text: 'Register', icon: <PersonAdd />, to: '/signup' }].map((item, index) => (
+            {[{ text: 'Logout', icon: <LogoutIcon />, to: '/login',onClick: handleLogout },{ text: 'Register', icon: <PersonAdd />, to: '/signup' }].map((item, index) => (
               <ListItem
                 component={Link}
                 to={item.to}
                 key={index}
+                onClick={item.onClick}
                 sx={{
                   ':hover': { backgroundColor: '#5a8dee', '&::after': {
                     content: '""',
@@ -263,7 +269,7 @@ const Layout: React.FC = () => {
           
         </Box>
         
-      </Drawer>
+      </Drawer>}
 
       {/* Main content */}
       <Container

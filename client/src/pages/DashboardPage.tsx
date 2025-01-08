@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Box, Paper, Grid, Button } from '@mui/material';
 import SchoolCalendar from '../components/SchoolCalendar';
+import { fetchEventsByTeacher } from '../api/event';
+import { useAuth } from '../contexts/AuthContext';
 
 const DashboardPage: React.FC = () => {
+    const { user } = useAuth();
+    const [events, setEvents] = useState<any[]>([]);
+    useEffect(() => {
+        // Fetch events when a class is selected
+        if (user?.id) {
+          const fetchEvents = async () => {
+            try {
+              const dataEvents = await fetchEventsByTeacher(user.id);
+              setEvents(dataEvents);
+            } catch (error) {
+              console.error("Failed to fetch events", error);
+            }
+          };
+          fetchEvents();
+        }
+      }, [user]);
     return (
         <Box
             sx={{
@@ -11,53 +29,6 @@ const DashboardPage: React.FC = () => {
                 padding: 5,
             }}
         >
-            <Box
-                sx={{
-                    marginBottom: 4,
-                    textAlign: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography
-                    variant="h3"
-                    sx={{
-                        fontWeight: 700,
-                        color: '#2c3e50',
-                        marginBottom: 2,
-                        fontSize: '2.5rem',
-                        letterSpacing: '1px',
-                    }}
-                >
-                    Dashboard
-                </Typography>
-                <Typography
-                    variant="h6"
-                    sx={{
-                        color: '#7f8c8d',
-                        marginBottom: 3,
-                        fontWeight: 400,
-                        fontSize: '1.1rem',
-                    }}
-                >
-                    Welcome to your personalized dashboard, manage your schedule effortlessly!
-                </Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                        marginBottom: 4,
-                        '&:hover': { backgroundColor: '#3498db' },
-                        padding: '12px 25px',
-                        fontSize: '1rem',
-                        borderRadius: '30px', // Bouton arrondi pour un effet moderne
-                    }}
-                >
-                    Explore More
-                </Button>
-            </Box>
 
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12}>
@@ -70,7 +41,7 @@ const DashboardPage: React.FC = () => {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            width: '1000px', 
+                            width: '100%', 
                             marginLeft:'-50px',
                         }}
                     >
@@ -94,7 +65,7 @@ const DashboardPage: React.FC = () => {
                                 width: '100%',
                             }}
                         >
-                            <SchoolCalendar />
+                            <SchoolCalendar events={events} />
                         </Box>
                     </Paper>
                 </Grid>
