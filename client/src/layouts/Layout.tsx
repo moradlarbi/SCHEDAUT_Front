@@ -146,7 +146,7 @@ const Layout: React.FC = () => {
             Navigation
           </Typography>
           <List>
-            {[{ text: 'Dashboard', icon: <Dashboard />, to: '/dashboard' }].map((item, index) => (
+            {[{ text: 'Calendar', icon: <Dashboard />, to: '/calendar' }].map((item, index) => (
               <ListItem
                 component={Link}
                 to={item.to}

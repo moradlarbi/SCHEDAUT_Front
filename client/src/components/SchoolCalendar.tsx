@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction'; 
 
-const SchoolCalendar = () => {
+
+const SchoolCalendar = (events : any) => {
   const handleDateClick = (arg: any) => {
     alert(`Date 2 clicked: ${arg.dateStr}`);
   };
-
+  useEffect(() => {
+    console.log(events)
+  }, [events])
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -20,6 +23,8 @@ const SchoolCalendar = () => {
       slotMaxTime="19:00:00"
       contentHeight="auto"
       weekends={false}
+      timeZone="UTC" // Si nécessaire pour éviter des ajustements automatiques par FullCalendar
+      events={events} 
       dayHeaderContent={(arg) => {
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
           weekday: 'short', 
@@ -35,31 +40,15 @@ const SchoolCalendar = () => {
         meridiem: false,
         hour12: false, 
       }}
-      events={[
-        {
-          title: 'CM',
-          start: '2024-10-24T10:00:00',
-          end: '2024-10-24T12:00:00',
-          module: 'SQL',
-          classroom: 'Salle 108'
-        },
-        {
-          title: 'TD',
-          start: '2024-10-25T13:00:00',
-          end: '2024-10-25T14:30:00',
-          module: 'COOL',
-          classroom: 'Salle 109'
-        },
-      ]}
       eventContent={(arg) => (
         <>
-          <b>{arg.event.title}</b> {/* Titre de l'événement */}
-          <div>{arg.event.extendedProps.module}</div> {/* Module */}
-          <div>{arg.event.extendedProps.classroom}</div> {/* Salle de classe */}
+          <div>{arg.event.title}</div> {/* Module */}
+          <div>{arg.event.extendedProps.class}</div> {/* Salle de classe */}
+          <div>{arg.event.extendedProps.teacher}</div>
         </>
       )}
       dateClick={handleDateClick} // Event handler for date clicks
-      eventClick={(info) => alert(`Event clicked: ${info.event.title}`)} // Event handler for event clicks
+      eventClick={(info) => alert(`Event clicked: ${info.event}`)} // Event handler for event clicks
     />
   );
 };

@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface User {
   email: string;
+  first_name: string;
+  last_name: string;
+  role : string;
 }
 
 interface AuthState {
@@ -58,8 +61,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { token, data } = response.data;
 
       localStorage.setItem('token', token); // Store token in localStorage
-      dispatch({ type: 'LOGIN', payload: { email: data.email } });
-      navigate('/dashboard');
+      dispatch({ type: 'LOGIN', payload: { email: data.email,first_name: data.first_name, last_name: data.last_name, role : data.role} });
+      if (data.role =="admin") {
+        navigate('/users');
+      }
+      else {
+        navigate("/dashboard")
+      }
     } catch (error) {
       console.error('Failed to login:', error);
       throw error;
