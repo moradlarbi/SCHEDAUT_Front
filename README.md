@@ -1,3 +1,21 @@
+Steps to run the application:
+1- clone back
+2 yarn
+3- docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management //sinon installer rabbitmq localement
+4- create .env file: JAWSDB_URL=mysql://e3v5vqvmprsuzjfi:a4dps9zul7ar1t85@onnjomlc4vqc55fw.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/pettlxfldr9yfyx0
+5- yarn run dev
+6- pip install pymysql pika pulp sqlalchemy pandas datetime
+7- python3 test_rabbitmq.py
+
+
+1- cd client
+2- yarn
+3- in package.json: update proxy by adr of the back
+4- yarn run start
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
