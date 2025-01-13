@@ -1,4 +1,4 @@
-# Gestionnaire de Ressources et de Calendrier
+# SchedAut
 
 Une application web moderne développée avec React.js, Material-UI, et Node.js pour gérer des ressources, consulter un calendrier, et effectuer des opérations CRUD.
 
