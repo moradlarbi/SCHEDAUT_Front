@@ -1,4 +1,4 @@
-Steps to run the application:
+# Steps to run the application:
 
 1- Clone the back-end repository:
    git clone https://github.com/moradlarbi/SCHEDAUT_Back
