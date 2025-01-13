@@ -79,13 +79,6 @@ const SignupPage: React.FC = () => {
                     {error && <p className="error-message">{error}</p>}
                     <button type="submit" className="btn">Sign Up</button>
                     
-                    <p>or Sign Up with Social Platforms</p>
-                    <div className="social-icons">
-                        <a href="#"><i className="bx bxl-google"></i></a>
-                        <a href="#"><i className="bx bxl-facebook"></i></a>
-                        <a href="#"><i className="bx bxl-github"></i></a>
-                        <a href="#"><i className="bx bxl-linkedin"></i></a>
-                    </div>
                 </form>
             </div>
 

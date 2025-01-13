@@ -99,10 +99,6 @@ const Layout: React.FC = () => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem onClick={() => navigate('/profile')}>
-                <PersonIcon sx={{ marginRight: 1 }} />
-                Profil
-              </MenuItem>
               
               <MenuItem onClick={handleLogout}>
                 <LogoutIcon sx={{ marginRight: 1 }} />
@@ -147,7 +143,7 @@ const Layout: React.FC = () => {
             Navigation
           </Typography>
           <List>
-            {[{ text: 'Calendar', icon: <Dashboard />, to: '/calendar' }].map((item, index) => (
+            {[{ text: 'Calendar', icon: <Dashboard />, to: user?.role ==="admin" ? '/calendar':"/pcalendar" }].map((item, index) => (
               <ListItem
                 component={Link}
                 to={item.to}

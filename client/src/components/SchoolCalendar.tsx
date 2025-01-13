@@ -45,6 +45,7 @@ const SchoolCalendar = (events : any) => {
           <div>{arg.event.title}</div> {/* Module */}
           <div>{arg.event.extendedProps.class}</div> {/* Salle de classe */}
           <div>{arg.event.extendedProps.teacher}</div>
+          <div>{arg.event.extendedProps.salle}</div>
         </>
       )}
       dateClick={handleDateClick} // Event handler for date clicks
