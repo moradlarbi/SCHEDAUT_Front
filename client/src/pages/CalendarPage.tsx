@@ -59,10 +59,8 @@ const CalendarPage: React.FC = () => {
               backgroundColor: '#ffffff',
               boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)', // Ombre plus marquée pour une profondeur
               borderRadius: 3,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%',
+              marginLeft:'-300PX',
+              width: '1500PX',
             }}
           >
             <Typography
@@ -106,7 +104,7 @@ const CalendarPage: React.FC = () => {
                 backgroundColor: '#ecf0f1', // Fond clair et doux
                 borderRadius: '15px', // Coins arrondis pour un aspect moderne
                 boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.1)', // Ombre légère
-                width: '100%',
+                width: '1400PX',
               }}
             >
               <SchoolCalendar events={events} />

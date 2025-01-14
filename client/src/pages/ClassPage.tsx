@@ -40,10 +40,12 @@ const ClassPage = () => {
                                     ? theme?.palette.primary.main
                                     : theme?.palette.error.main,
                             color: "#fff",
-                            borderRadius: "32px",
+                            borderRadius: "30px",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                              marginTop:'15PX',
+                            height:'28PX'
                         }}
                     >
                         {params.row.active === 1 ? "Active" : "Blocked"}
@@ -237,7 +239,7 @@ const ClassPage = () => {
                         },
                     ]}
                 />
-                <Box sx={{ height: 450 }}>
+                <Box sx={{ height:'650PX',width:'1500PX',marginLeft:'-290PX'}}>
                     <CustomDataGrid
                         selectionModel={selectedRows}
                         onRowSelectionModelChange={(newRowSelectionModel: SetStateAction<number[] | undefined>) => {

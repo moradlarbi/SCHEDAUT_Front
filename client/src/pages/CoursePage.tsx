@@ -47,6 +47,10 @@ const CoursePage = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            padding:'0 0',
+              marginTop:'15PX',
+            height:'28PX'
+            
           }}
         >
           {params.row.active === 1 ? 'Active' : 'Blocked'}
@@ -232,7 +236,7 @@ const CoursePage = () => {
             },
           ]}
         />
-        <Box sx={{ height: 450 }}>
+        <Box sx={{ height:'650PX',width:'1500PX',marginLeft:'-290PX'}}>
           <CustomDataGrid
             selectionModel={selectedRows}
             onRowSelectionModelChange={(newRowSelectionModel: SetStateAction<number[] | undefined>) =>
