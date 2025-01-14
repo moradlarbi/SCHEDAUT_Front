@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, Paper, Grid, TextField, Autocomplete } from '@mui/material';
+import { Typography, Box, Paper, Grid, TextField, Autocomplete, Button } from '@mui/material';
 import SchoolCalendar from '../components/SchoolCalendar';
 import { fetchClass, fetchEventsByClass } from '../api/event';
-
+import * as XLSX from 'xlsx';
 const CalendarPage: React.FC = () => {
   const [idClass, setIdClass] = useState<number | null>(null);
   const [events, setEvents] = useState<any[]>([]);
@@ -36,6 +36,12 @@ const CalendarPage: React.FC = () => {
       fetchEvents();
     }
   }, [idClass]);
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(events); // Convert events to sheet
+    const wb = XLSX.utils.book_new(); // Create a new workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Events'); // Append the sheet to the workbook
+    XLSX.writeFile(wb, 'events.xlsx'); // Trigger download
+  };
 
   return (
     <Box
@@ -85,7 +91,14 @@ const CalendarPage: React.FC = () => {
                 />
               )}
             />
-
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ marginBottom: 3 }}
+              onClick={exportToExcel} // Handle export
+            >
+              Export to Excel
+            </Button>
             {/* Conteneur du calendrier */}
             <Box
               sx={{
