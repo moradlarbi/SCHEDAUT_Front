@@ -186,7 +186,7 @@ const Layout: React.FC = () => {
           </Typography>
           <List>
             {[{ text: 'Classes', icon: <GroupWorkIcon />, to: '/classes' },
-              { text: 'Modules', icon: <AutoStoriesSharpIcon />, to: '/courses' },
+              { text: 'Couses', icon: <AutoStoriesSharpIcon />, to: '/courses' },
               { text: 'Users', icon: <Groups2Icon />, to: '/users' },
               { text: 'Rooms', icon: <MeetingRoom />, to: '/salles' },
             ].map((item, index) => (
