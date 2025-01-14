@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction'; 
-
+import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 
 const SchoolCalendar = (events : any) => {
   const handleDateClick = (arg: any) => {
@@ -41,12 +41,12 @@ const SchoolCalendar = (events : any) => {
         hour12: false, 
       }}
       eventContent={(arg) => (
-        <>
-          <div>{arg.event.title}</div> {/* Module */}
-          <div>{arg.event.extendedProps.class}</div> {/* Salle de classe */}
-          <div>{arg.event.extendedProps.teacher}</div>
-          <div>{arg.event.extendedProps.salle}</div>
-        </>
+        <Box sx={{ display: 'flex', flexDirection: 'column',borderRadius:'5px',backgroundColor:'#3788d8!important' }}>
+          <Box sx={{ fontWeight: 'bold' }}>{arg.event.title}</Box> {/* Module */}
+          <Box>{arg.event.extendedProps.class}</Box> {/* Salle de classe */}
+          <Box sx={{ fontStyle: 'italic' }}>{arg.event.extendedProps.teacher}</Box> {/* Professeur */}
+          <Box>{arg.event.extendedProps.salle}</Box> {/* Salle */}
+        </Box>
       )}
       dateClick={handleDateClick} // Event handler for date clicks
       eventClick={(info) => alert(`Event clicked: ${info.event}`)} // Event handler for event clicks
