@@ -3,6 +3,7 @@ import { Typography, Box, Paper, Grid, Button } from '@mui/material';
 import SchoolCalendar from '../components/SchoolCalendar';
 import { fetchEventsByTeacher } from '../api/event';
 import { useAuth } from '../contexts/AuthContext';
+import * as XLSX from 'xlsx';
 
 const DashboardPage: React.FC = () => {
     const { user } = useAuth();
@@ -21,6 +22,12 @@ const DashboardPage: React.FC = () => {
           fetchEvents();
         }
       }, [user]);
+       const exportToExcel = () => {
+          const ws = XLSX.utils.json_to_sheet(events); // Convert events to sheet
+          const wb = XLSX.utils.book_new(); // Create a new workbook
+          XLSX.utils.book_append_sheet(wb, ws, 'Events'); // Append the sheet to the workbook
+          XLSX.writeFile(wb, 'events.xlsx'); // Trigger download
+        };
     return (
         <Box
             sx={{
@@ -29,8 +36,15 @@ const DashboardPage: React.FC = () => {
                 padding: 5,
             }}
         >
-
-            <Grid container spacing={4}>
+            <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginBottom: 3 }}
+                onClick={exportToExcel} // Handle export
+            >
+                Export to Excel
+            </Button>
+            <Grid container spacing={4}>    
                 <Grid item xs={12} sm={12} md={12}>
                     <Paper
                         sx={{
