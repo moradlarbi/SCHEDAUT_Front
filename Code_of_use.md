@@ -4,7 +4,7 @@
 
 1. Clone the backend repository:
    ```bash
-   git clone <backend-repo-url>
+   git clone https://github.com/moradlarbi/SCHEDAUT_Front
    ```
 2. Install dependencies:
    ```bash
