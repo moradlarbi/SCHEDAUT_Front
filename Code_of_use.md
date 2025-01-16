@@ -34,7 +34,7 @@
 
 7. Test RabbitMQ:
    ```bash
-   python3 test_rabbitmq.py
+   python3 cnx_rabbitmq.py
    ```h
 
 ## Frontend Setup
